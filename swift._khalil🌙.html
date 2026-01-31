@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المكتبة الموسيقية الشاملة - نظام تعليمي متكامل للأساتذة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #4169e1;
+            --accent: #ff6b6b;
+            --success: #20bf6b;
+            --warning: #fed330;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-dark: rgba(0, 0, 0, 0.35);
+            --text: #2d3436;
+            --text-light: #636e72;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.2);
+            --border-radius: 28px;
+            --transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-accent: linear-gradient(135deg, var(--accent), var(--warning));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--text);
+            line-height: 1.8;
+            min-height: 100vh;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* تأثيرات الزجاج المتقدمة */
+        .glass-effect {
+            background: var(--glass);
+            backdrop-filter: blur(25px) saturate(200%);
+            -webkit-backdrop-filter: blur(25px) saturate(200%);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .glass-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+        }
+
+        /* الأنيميشن الأساسية */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(5deg); }
+            66% { transform: translateY(10px) rotate(-5deg); }
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.8; box-shadow: 0 0 20px rgba(138, 43, 226, 0.3); }
+            50% { opacity: 1; box-shadow: 0 0 40px rgba(138, 43, 226, 0.6); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            70% {
+                transform: scale(1.05) translateY(-5px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* الهيدر الاحترافي */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            padding: 25px 0;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 5px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        header.scrolled {
+            padding: 18px 0;
+            background: rgba(255, 255, 255, 0.99);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .logo-icon {
+            font-size: 4rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 8px 20px rgba(138, 43, 226, 0.4));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo h1 {
+            font-size: 2.8rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .logo p {
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* القائمة الرئيسية */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        nav a {
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 16px 32px;
+            border-radius: 50px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            transition: var(--transition);
+            z-index: -1;
+            border-radius: 50px;
+        }
+
+        nav a:hover::before {
+            left: 0;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.4);
+        }
+
+        nav a.active {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 15px 35px rgba(138, 43, 226, 0.5);
+        }
+
+        /* القسم الرئيسي */
+        .hero {
+            padding: 240px 0 180px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .music-note {
+            position: absolute;
+            font-size: 2.5rem;
+            color: rgba(138, 43, 226, 0.2);
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: fadeInUp 1.2s ease-out 0.4s both;
+        }
+
+        .hero h2 {
+            font-size: 5rem;
+            margin-bottom: 50px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            line-height: 1.1;
+            text-shadow: 0 15px 40px rgba(138, 43, 226, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.8rem;
+            color: var(--text-light);
+            margin-bottom: 60px;
+            line-height: 1.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 22px 50px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            border-radius: 50px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+
+        .cta-button.primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 20px 50px rgba(138, 43, 226, 0.5);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 30px 60px rgba(138, 43, 226, 0.6);
+        }
+
+        /* الدروس الرئيسية */
+        .main-lessons {
+            padding: 180px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 100px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .section-title h2 {
+            font-size: 4rem;
+            display: inline-block;
+            padding: 0 50px 30px;
+            position: relative;
+            margin-bottom: 25px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 8px;
+            background: var(--gradient);
+            border-radius: 10px;
+            animation: glow 3s infinite;
+        }
+
+        .section-title p {
+            font-size: 1.6rem;
+            color: var(--text-light);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* شبكة الدروس */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 60px;
+            margin-top: 80px;
+        }
+
+        .lesson-card {
+            padding: 60px 50px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            animation: cardPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .lesson-card:nth-child(1) { animation-delay: 0.1s; }
+        .lesson-card:nth-child(2) { animation-delay: 0.2s; }
+        .lesson-card:nth-child(3) { animation-delay: 0.3s; }
+        .lesson-card:nth-child(4) { animation-delay: 0.4s; }
+        .lesson-card:nth-child(5) { animation-delay: 0.5s; }
+        .lesson-card:nth-child(6) { animation-delay: 0.6s; }
+        .lesson-card:nth-child(7) { animation-delay: 0.7s; }
+        .lesson-card:nth-child(8) { animation-delay: 0.8s; }
+
+        .lesson-card:hover {
+            transform: translateY(-25px) scale(1.04);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .lesson-icon {
+            font-size: 5rem;
+            margin-bottom: 40px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            display: inline-block;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lesson-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140px;
+            height: 140px;
+            background: var(--gradient);
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        .lesson-card:hover .lesson-icon {
+            transform: scale(1.15);
+            filter: drop-shadow(0 15px 25px rgba(138, 43, 226, 0.5));
+        }
+
+        .lesson-card:hover .lesson-icon::after {
+            opacity: 0.25;
+            transform: translate(-50%, -50%) scale(1.3);
+        }
+
+        .lesson-card h3 {
+            font-size: 2.3rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--text);
+            font-weight: 900;
+            line-height: 1.3;
+        }
+
+        .lesson-card p {
+            color: var(--text-light);
+            margin-bottom: 40px;
+            text-align: justify;
+            flex-grow: 1;
+            font-size: 1.3rem;
+            line-height: 1.9;
+        }
+
+        .lesson-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            padding: 20px 40px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.3rem;
+            transition: var(--transition);
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+        }
+
+        .lesson-link::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: translateX(-100%);
+        }
+
+        .lesson-link:hover::after {
+            animation: shimmer 1.2s;
+        }
+
+        .lesson-link:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.5);
+        }
+
+        .lesson-link i {
+            transition: var(--transition);
+        }
+
+        .lesson-link:hover i {
+            transform: translateX(12px);
+        }
+
+        /* صفحة الدرس التفصيلية */
+        .lesson-page {
+            padding: 200px 0 120px;
+            display: none;
+            min-height: 100vh;
+            animation: pageFadeIn 0.8s ease-out;
+        }
+
+        .lesson-page.active {
+            display: block;
+        }
+
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 100px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-header h2 {
+            font-size: 4.5rem;
+            margin-bottom: 30px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .lesson-header p {
+            font-size: 1.8rem;
+            color: var(--text-light);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .lesson-content {
+            padding: 70px;
+            margin-bottom: 80px;
+        }
+
+        .lesson-content h3 {
+            font-size: 2.8rem;
+            margin: 60px 0 30px;
+            color: var(--primary);
+            padding-right: 25px;
+            border-right: 8px solid var(--secondary);
+            animation: slideInRight 0.8s ease-out both;
+        }
+
+        .lesson-content h3:nth-child(1) { animation-delay: 0.3s; }
+        .lesson-content h3:nth-child(2) { animation-delay: 0.4s; }
+        .lesson-content h3:nth-child(3) { animation-delay: 0.5s; }
+        .lesson-content h3:nth-child(4) { animation-delay: 0.6s; }
+
+        .lesson-content p {
+            margin-bottom: 35px;
+            font-size: 1.4rem;
+            line-height: 2;
+            color: var(--text);
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .lesson-content p:nth-of-type(1) { animation-delay: 0.4s; }
+        .lesson-content p:nth-of-type(2) { animation-delay: 0.5s; }
+        .lesson-content p:nth-of-type(3) { animation-delay: 0.6s; }
+
+        .lesson-content ul {
+            margin: 35px 0 50px 60px;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .lesson-content li {
+            margin-bottom: 25px;
+            position: relative;
+            padding-right: 35px;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .lesson-content li::before {
+            content: '♪';
+            position: absolute;
+            right: 0;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 22px 45px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 700;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+        }
+
+        .back-button:hover::after {
+            animation: shimmer 1s;
+        }
+
+        .back-button:hover {
+            transform: translateX(15px);
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.5);
+        }
+
+        /* الأشكال الإيقاعية */
+        .rhythms {
+            padding: 150px 0;
+            text-align: center;
+        }
+
+        .rhythm-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .rhythm {
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+            animation: cardPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        .rhythm:nth-child(1) { animation-delay: 0.1s; }
+        .rhythm:nth-child(2) { animation-delay: 0.2s; }
+        .rhythm:nth-child(3) { animation-delay: 0.3s; }
+        .rhythm:nth-child(4) { animation-delay: 0.4s; }
+
+        .rhythm::before {
+            content: '♪ ♫ ♪ ♫';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 2rem;
+            opacity: 0.2;
+        }
+
+        .rhythm h4 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .rhythm p {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .rhythm p:last-child {
+            font-size: 1.6rem;
+            color: var(--text);
+            font-weight: 700;
+            background: rgba(138, 43, 226, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        /* الفوتر */
+        footer {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 120px 0 50px;
+            margin-top: 150px;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 70px;
+            margin-bottom: 70px;
+        }
+
+        .footer-section h3 {
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .footer-section p {
+            margin-bottom: 25px;
+            color: #b0b0b0;
+            font-size: 1.2rem;
+            line-height: 1.9;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: var(--transition);
+            padding: 15px 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-10px);
+        }
+
+        .contact-item i {
+            font-size: 1.8rem;
+            color: var(--primary);
+            min-width: 40px;
+        }
+
+        .contact-item span {
+            font-size: 1.2rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        /* التنقل السريع */
+        .quick-nav {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .quick-nav-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-nav-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .quick-nav-btn:hover::after {
+            opacity: 1;
+        }
+
+        .quick-nav-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.6);
+        }
+
+        .quick-nav-btn.up {
+            animation: float 3s infinite;
+        }
+
+        .quick-nav-btn.down {
+            animation: float 3s infinite 0.5s;
+        }
+
+        /* أنيميشن التحميل */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* تأثيرات النقر */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.6);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .ripple:focus:not(:active)::after {
+            animation: rippleEffect 1s ease-out;
+        }
+
+        @keyframes rippleEffect {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(50, 50);
+                opacity: 0;
+            }
+        }
+
+        /* التجاوبية */
+        @media (max-width: 1200px) {
+            .hero h2 { font-size: 4rem; }
+            .section-title h2 { font-size: 3.5rem; }
+            .lessons-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 992px) {
+            .header-content { flex-direction: column; gap: 30px; }
+            nav ul { flex-wrap: wrap; justify-content: center; }
+            .hero { padding: 200px 0 150px; }
+            .hero h2 { font-size: 3.5rem; }
+            .hero p { font-size: 1.6rem; }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 25px; }
+            .hero h2 { font-size: 2.8rem; }
+            .hero p { font-size: 1.4rem; }
+            .section-title h2 { font-size: 2.8rem; }
+            .lessons-grid { grid-template-columns: 1fr; }
+            .lesson-card { padding: 40px 30px; }
+            .lesson-header { padding: 60px 30px; }
+            .lesson-header h2 { font-size: 3rem; }
+            .quick-nav { bottom: 20px; left: 20px; }
+            .quick-nav-btn { width: 55px; height: 55px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <div class="loading-text">جاري تحميل المكتبة الموسيقية...</div>
+    </div>
+
+    <!-- أزرار التنقل السريع -->
+    <div class="quick-nav">
+        <button class="quick-nav-btn up" id="scrollToTop" title="للأعلى">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <button class="quick-nav-btn down" id="scrollToBottom" title="لأسفل">
+            <i class="fas fa-arrow-down"></i>
+        </button>
+    </div>
+
+    <!-- الهيدر -->
+    <header class="glass-effect">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-music logo-icon"></i>
+                    <div class="logo-text">
+                        <h1>المكتبة الموسيقية الشاملة</h1>
+                        <p>نظام تعليمي متكامل للأساتذة - أولى ثانوي علوم تجريبية</p>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home" class="nav-link active ripple"><i class="fas fa-home"></i> الرئيسية</a></li>
+                        <li><a href="#lessons" class="nav-link ripple"><i class="fas fa-book-open"></i> الدروس</a></li>
+                        <li><a href="#rhythms" class="nav-link ripple"><i class="fas fa-drum"></i> الإيقاعات</a></li>
+                        <li><a href="#contact" class="nav-link ripple"><i class="fas fa-envelope"></i> اتصل بنا</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- الصفحة الرئيسية -->
+    <section id="home" class="hero">
+        <div class="hero-bg">
+            <div class="music-note" style="top: 10%; left: 10%; animation-delay: 0s;">♪</div>
+            <div class="music-note" style="top: 30%; right: 15%; animation-delay: 1s;">♫</div>
+            <div class="music-note" style="bottom: 20%; left: 20%; animation-delay: 2s;">♪</div>
+            <div class="music-note" style="bottom: 40%; right: 10%; animation-delay: 3s;">♫</div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="glass-effect" style="padding: 80px; max-width: 1200px; margin: 0 auto;">
+                    <h2>مرحباً بكم في المكتبة الموسيقية الشاملة</h2>
+                    <p>منصة تعليمية متطورة لمادة الموسيقى، صممت خصيصاً لتسهيل عملية التعليم للأساتذة والتعلم للطلاب. اكتشف عالم الموسيقى بأسلوب تفاعلي حديث.</p>
+                    <div class="hero-buttons">
+                        <a href="#lessons" class="cta-button primary ripple">
+                            <span>استكشاف الدروس</span>
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <button class="cta-button secondary ripple" id="teacherTools">
+                            <span>أدوات الأساتذة</span>
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- الدروس الرئيسية -->
+    <section id="lessons" class="main-lessons">
+        <div class="container">
+            <div class="section-title">
+                <h2>الدروس التعليمية المتكاملة</h2>
+                <p>اختر الدرس للتعمق في تفاصيله مع واجهة تفاعلية مخصصة للأساتذة</p>
+            </div>
+            
+            <div class="lessons-grid">
+                <!-- الدرس 1 -->
+                <div class="lesson-card glass-effect" data-lesson="andalusian">
+                    <div class="lesson-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <h3>الموسيقى الأندلسية</h3>
+                    <p>تعرف على الموسيقى الأندلسية ومدرسة الصنعة، هذا التراث الموسيقي العريق الذي يمزج بين الثقافات العربية والإسبانية.</p>
+                    <button class="lesson-link view-lesson ripple" data-lesson="andalusian">
+                        <span>عرض الدرس</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <!-- الدرس 2 -->
+                <div class="lesson-card glass-effect" data-lesson="nasraf">
+                    <div class="lesson-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3>تعريف النصراف</h3>
+                    <p>النصراف هو تبادل الأدوار بين المغنيين أو الآلات في الأداء الموسيقي الجماعي، وهو أسلوب مهم في التراث الموسيقي.</p>
+                    <button class="lesson-link view-lesson ripple" data-lesson="nasraf">
+                        <span>عرض الدرس</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <!-- الدرس 3 -->
+                <div class="lesson-card glass-effect" data-lesson="dahmane">
+                    <div class="lesson-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>دحمان حراشي</h3>
+                    <p>الفنان الجزائري الشهير دحمان حراشي، أحد أعمدة الموسيقى الجزائرية الأصيلة وأبرز مؤدي فن الشاوي والملحون.</p>
+                    <button class="lesson-link view-lesson ripple" data-lesson="dahmane">
+                        <span>عرض الدرس</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <!-- الدرس 4 -->
+                <div class="lesson-card glass-effect" data-lesson="munir">
+                    <div class="lesson-icon">
+                        <i class="fas fa-guitar"></i>
+                    </div>
+                    <h3>منير بشير</h3>
+                    <p>العازف العراقي العالمي على العود، الملقب بـ"إمبراطور العود"، وأحد أهم المجددين في الموسيقى العربية المعاصرة.</p>
+                    <button class="lesson-link view-lesson ripple" data-lesson="munir">
+                        <span>عرض الدرس</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <!-- الدرس 5 -->
+                <div class="lesson-card glass-effect" data-lesson="sonata">
+                    <div class="lesson-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>الصوناتا</h3>
+                    <p>الصوناتا هي شكل موسيقي آلي يتكون عادة من ثلاث أو أربع حركات، تطور عبر العصور ليشمل أنماطاً مختلفة.</p>
+                    <button class="lesson-link view-lesson ripple" data-lesson="sonata">
+                        <span>عرض الدرس</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <!-- الدرس 6 -->
+                <div class="lesson-card glass-effect" data-lesson="opera">
+                    <div class="lesson-icon">
+                        <i class="fas fa-theater-masks"></i>
+                    </div>
+                    <h3>الأوبرا</h3>
+                    <p>الأوبرا هي شكل من أشكال الفن المسرحي الذي يجمع بين الغناء والموسيقى والأداء الدرامي في عرض متكامل.</p>
+                    <button class="lesson-link view-lesson ripple" data-lesson="opera">
+                        <span>عرض الدرس</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <!-- الدرس 7 -->
+                <div class="lesson-card glass-effect" data-lesson="composition">
+                    <div class="lesson-icon">
+                        <i class="fas fa-pen-nib"></i>
+                    </div>
+                    <h3>أنواع التأليف الغنائي</h3>
+                    <p>استكشاف أنواع التأليف الغنائية في الموسيقى العربية والعالمية، من الموشحات إلى الأغاني العصرية.</p>
+                    <button class="lesson-link view-lesson ripple" data-lesson="composition">
+                        <span>عرض الدرس</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <!-- الدرس 8 -->
+                <div class="lesson-card glass-effect" data-lesson="sonata-composition">
+                    <div class="lesson-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>التأليف الآلي للصوناتا</h3>
+                    <p>التأليف الآلي للصوناتا يشمل بنية الحركات، التطورات اللحنية، والتناغمات المستخدمة في هذا الشكل الموسيقي.</p>
+                    <button class="lesson-link view-lesson ripple" data-lesson="sonata-composition">
+                        <span>عرض الدرس</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- الأشكال الإيقاعية -->
+    <section id="rhythms" class="rhythms">
+        <div class="container">
+            <div class="section-title">
+                <h2>الأشكال الإيقاعية</h2>
+                <p>تعرف على الأنماط الإيقاعية الأساسية في الموسيقى العربية والعالمية</p>
+            </div>
+            
+            <div class="rhythm-container">
+                <div class="rhythm glass-effect">
+                    <h4>إيقاع السماعي</h4>
+                    <p>10/8 | دور واحد</p>
+                    <p>دن - تاك - دن - دن - تاك</p>
+                </div>
+                
+                <div class="rhythm glass-effect">
+                    <h4>إيقاع الدادي</h4>
+                    <p>14/8 | دورين</p>
+                    <p>دوم - تك - تك - دوم - تك - تك</p>
+                </div>
+                
+                <div class="rhythm glass-effect">
+                    <h4>إيقاع المربع</h4>
+                    <p>4/4 | أبسط الإيقاعات</p>
+                    <p>طن - طن - طن - طن</p>
+                </div>
+                
+                <div class="rhythm glass-effect">
+                    <h4>إيقاع الوا حد</h4>
+                    <p>2/4 | سريع</p>
+                    <p>دوم - تك - دوم - تك</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- صفحات الدروس التفصيلية -->
+    
+    <!-- صفحة الموسيقى الأندلسية -->
+    <div id="lesson-andalusian" class="lesson-page">
+        <div class="container">
+            <div class="lesson-header glass-effect">
+                <h2>الموسيقى الأندلسية</h2>
+                <p>مدرسة الصنعة - التراث الموسيقي العريق</p>
+            </div>
+            
+            <div class="lesson-content glass-effect">
+                <h3>تعريف الموسيقى الأندلسية</h3>
+                <p>الموسيقى الأندلسية هي تراث موسيقي عريق نشأ في الأندلس (إسبانيا الإسلامية) خلال القرن التاسع الميلادي وازدهر طوال ثمانية قرون. تمتاز هذه الموسيقى بجمعها بين التأثيرات العربية الأمازيغية والمحلية الأيبيرية مع عناصر من الموسيقى الأوروبية.</p>
+                
+                <h3>مدرسة الصنعة</h3>
+                <p>مدرسة الصنعة هي المدرسة الجزائرية للموسيقى الأندلسية، وتُعرف أيضاً بـ"الغرناطي". تتميز بـ:</p>
+                <ul>
+                    <li>استخدام النوبة كشكل موسيقي رئيسي</li>
+                    <li>التقسيم إلى خمس نوبات رئيسية (مصدّرة، مستخارة، رصد الذيل، رمل الماية، غريب)</li>
+                    <li>استخدام مقامات موسيقية خاصة</li>
+                    <li>الأداء الجماعي المنظم</li>
+                    <li>الدقة في الحفاظ على التراث</li>
+                </ul>
+                
+                <h3>مكونات النوبة الأندلسية</h3>
+                <p>تتكون النوبة من عدة أجزاء متسلسلة:</p>
+                <ul>
+                    <li>الاستهلال: مقدمة موسيقية آلية</li>
+                    <li>المصدّر: بداية الغناء</li>
+                    <li>البطايحي: جزء سريع الإيقاع</li>
+                    <li>الدخول: انتقال إلى قسم جديد</li>
+                    <li>الانصراف: ختام النوبة</li>
+                </ul>
+                
+                <button class="back-button ripple">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة إلى الدروس</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحة النصراف -->
+    <div id="lesson-nasraf" class="lesson-page">
+        <div class="container">
+            <div class="lesson-header glass-effect">
+                <h2>تعريف النصراف</h2>
+                <p>تبادل الأدوار في الأداء الموسيقي</p>
+            </div>
+            
+            <div class="lesson-content glass-effect">
+                <h3>مفهوم النصراف</h3>
+                <p>النصراف في الموسيقى هو أسلوب أداء يتم فيه تبادل الأدوار بين المغنيين أو العازفين في الفرقة الموسيقية. هذا الأسلوب يخلق حواراً موسيقياً ويضيف تنوعاً وتفاعلاً في الأداء.</p>
+                
+                <h3>أنواع النصراف</h3>
+                <ul>
+                    <li><strong>النصراف بين المغنيين:</strong> تبادل الغناء بين مغنيين أو أكثر</li>
+                    <li><strong>النصراف بين الآلات:</strong> تبادل العزف بين آلات مختلفة</li>
+                    <li><strong>النصراف بين المغني والآلة:</strong> حوار بين الصوت البشري والآلة الموسيقية</li>
+                    <li><strong>النصراف الجماعي:</strong> تبادل بين مجموعات من العازفين</li>
+                </ul>
+                
+                <h3>أهمية النصراف</h3>
+                <p>1. إضافة التنوع والتشويق إلى الأداء الموسيقي<br>
+                2. إبراز مهارات الأفراد في الفرقة<br>
+                3. خلق حوار موسيقي تفاعلي<br>
+                4. إظهار التناغم والانسجام بين أعضاء الفرقة<br>
+                5. إتاحة الفرصة للارتجال والتعبير الفردي</p>
+                
+                <h3>أمثلة على النصراف</h3>
+                <p>يستخدم النصراف بكثرة في:</p>
+                <ul>
+                    <li>الموسيقى الأندلسية والملحون</li>
+                    <li>الموسيقى الصوفية والإنشاد</li>
+                    <li>الفلكلور الشعبي في مختلف المناطق</li>
+                    <li>الموسيقى الكلاسيكية العربية</li>
+                </ul>
+                
+                <button class="back-button ripple">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة إلى الدروس</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحة دحمان حراشي -->
+    <div id="lesson-dahmane" class="lesson-page">
+        <div class="container">
+            <div class="lesson-header glass-effect">
+                <h2>دحمان حراشي</h2>
+                <p>فنان الشاوي والملحون الجزائري</p>
+            </div>
+            
+            <div class="lesson-content glass-effect">
+                <h3>السيرة الذاتية</h3>
+                <p><strong>الاسم الكامل:</strong> دحمان بن عيسى حراشي<br>
+                <strong>الميلاد:</strong> 1926 في الحراش، الجزائر<br>
+                <strong>الوفاة:</strong> 30 ديسمبر 1980 في الجزائر العاصمة<br>
+                <strong>النوع الموسيقي:</strong> الشاوي، الملحون، الموسيقى الجزائرية الأصيلة</p>
+                
+                <h3>المسيرة الفنية</h3>
+                <p>بدأ دحمان حراشي مسيرته الفنية في الأربعينيات، واشتهر بصوته القوي والعاطفي الذي يجسد معاناة الشعب الجزائري. يعتبر من أبرز فناني موسيقى الشاوي التي تنتمي إلى منطقة الأوراس في شرق الجزائر.</p>
+                
+                <h3>أبرز أعماله</h3>
+                <ul>
+                    <li>"يا مليحة في المحيا" - أشهر أغانيه</li>
+                    <li>"عينيا وين رايح"</li>
+                    <li>"الطير المهاجر"</li>
+                    <li>"يا ناس وينكوا"</li>
+                    <li>"الدار دارنا"</li>
+                </ul>
+                
+                <h3>خصائص فنه</h3>
+                <p>1. <strong>الصوت القوي والعاطفي:</strong> يتميز بصوت جهوري يعبر عن المشاعر بعمق<br>
+                2. <strong>الالتزام بالتراث:</strong> حافظ على الأصالة في الأداء واللحن<br>
+                3. <strong>المواضيع الاجتماعية:</strong> تناول في أغانيه قضايا الوطن والحب والهجرة<br>
+                4. <strong>اللحن المميز:</strong> استخدم ألحاناً تعكس هوية الموسيقى الشاوية</p>
+                
+                <h3>الإرث والتأثير</h3>
+                <p>يعتبر دحمان حراشي مدرسة فنية بحد ذاتها، وقد تأثر به العديد من الفنانين الجزائريين والعرب. حافظ على مكانته كرمز من رموز الموسيقى الجزائرية الأصيلة رغم مرور الزمن.</p>
+                
+                <button class="back-button ripple">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة إلى الدروس</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحة منير بشير -->
+    <div id="lesson-munir" class="lesson-page">
+        <div class="container">
+            <div class="lesson-header glass-effect">
+                <h2>منير بشير</h2>
+                <p>إمبراطور العود العراقي</p>
+            </div>
+            
+            <div class="lesson-content glass-effect">
+                <h3>السيرة الذاتية</h3>
+                <p><strong>الاسم الكامل:</strong> منير بشير<br>
+                <strong>الميلاد:</strong> 1930 في الموصل، العراق<br>
+                <strong>الوفاة:</strong> 28 سبتمبر 1997 في بودابست، المجر<br>
+                <strong>الآلة الرئيسية:</strong> العود<br>
+                <strong>التخصص:</strong> عازف عود، ملحن، قائد أوركسترا</p>
+                
+                <h3>المسيرة الفنية</h3>
+                <p>بدأ منير بشير تعلم العود في سن مبكرة على يد أخيه الأكبر جميل بشير. سافر إلى بغداد للدراسة في معهد الفنون الجميلة، ثم حصل على منحة للدراسة في بودابست حيث تخصص في الموسيقى الشرقية.</p>
+                
+                <h3>الإنجازات الفنية</h3>
+                <ul>
+                    <li>ابتكر أسلوباً جديداً في العزف على العود يعتمد على تقنيات معقدة</li>
+                    <li>قام بتطوير العود من حيث التصنيع والتقنيات العزفية</li>
+                    <li>قدم أكثر من 300 عمل موسيقي بين معزوفات ومؤلفات</li>
+                    <li>أسس المدرسة العراقية الحديثة في العزف على العود</li>
+                    <li>عزف مع أوركسترات عالمية في أهم المسارح العالمية</li>
+                </ul>
+                
+                <h3>الأسلوب الموسيقي</h3>
+                <p>تميز أسلوب منير بشير بـ:</p>
+                <ul>
+                    <li>السرعة الفائقة في العزف مع الحفاظ على الدقة</li>
+                    <li>الارتجال الإبداعي المميز</li>
+                    <li>دمج التقنيات الشرقية والغربية</li>
+                    <li>استخدام تقنيات متطورة في اليد اليمنى واليسرى</li>
+                    <li>التنويع في الإيقاعات والمقامات</li>
+                </ul>
+                
+                <h3>أشهر أعماله</h3>
+                <p>1. "بغداد" - سيمفونية للعود والأوركسترا<br>
+                2. "طريق الحرير"<br>
+                3. "الفانتازيا العراقية"<br>
+                4. "ألحان من بلاد الرافدين"<br>
+                5. "ديوان العود"</p>
+                
+                <button class="back-button ripple">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة إلى الدروس</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحة الصوناتا -->
+    <div id="lesson-sonata" class="lesson-page">
+        <div class="container">
+            <div class="lesson-header glass-effect">
+                <h2>الصوناتا</h2>
+                <p>الشكل الموسيقي الآلي الكلاسيكي</p>
+            </div>
+            
+            <div class="lesson-content glass-effect">
+                <h3>تعريف الصوناتا</h3>
+                <p>الصوناتا (Sonata) هي مصطلح موسيقي يشير إلى شكل مؤلف موسيقي مكتوب لآلة واحدة أو آلتين، ويتكون عادة من ثلاث أو أربع حركات ذات تباين في السرعة والمزاج.</p>
+                
+                <h3>التطور التاريخي</h3>
+                <p>1. <strong>العصر الباروكي:</strong> الصوناتا دي كاميرا (للغرفة) والصوناتا دي كيزا (للكنيسة)<br>
+                2. <strong>العصر الكلاسيكي:</strong> تبلور شكل الصوناتا بثلاث حركات<br>
+                3. <strong>العصر الرومانسي:</strong> تطور الشكل وازدياد التعقيد<br>
+                4. <strong>العصر الحديث:</strong> تجريب أشكال جديدة مع الاحتفاظ بالأساسيات</p>
+                
+                <h3>بنية الصوناتا الكلاسيكية</h3>
+                <ul>
+                    <li><strong>الحركة الأولى:</strong> سريعة، بنية سوناتا-أليغرو (موضوع، تطور، إعادة)</li>
+                    <li><strong>الحركة الثانية:</strong> بطيئة، بنية أغنية أو روندو</li>
+                    <li><strong>الحركة الثالثة:</strong> متوسطة السرعة، غالباً مينويت أو سكيرتزو</li>
+                    <li><strong>الحركة الرابعة:</strong> سريعة جداً، بنية روندو أو سوناتا</li>
+                </ul>
+                
+                <h3>أشهر مؤلفي الصوناتات</h3>
+                <p>• يوهان سباستيان باخ<br>
+                • فولفغانغ أماديوس موتسارت<br>
+                • لودفيغ فان بيتهوفن (32 سوناتا للبيانو)<br>
+                • فرانز شوبيرت<br>
+                • فريدريك شوبان</p>
+                
+                <h3>أنواع الصوناتا</h3>
+                <p><strong>حسب عدد الآلات:</strong><br>
+                - سوناتا للآلة المنفردة (بيانو)<br>
+                - سوناتا لآلتين (كمان وبيانو)<br>
+                - سوناتا للثلاثي أو الرباعي</p>
+                
+                <button class="back-button ripple">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة إلى الدروس</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحة الأوبرا -->
+    <div id="lesson-opera" class="lesson-page">
+        <div class="container">
+            <div class="lesson-header glass-effect">
+                <h2>الأوبرا</h2>
+                <p>فن المسرح الموسيقي الغنائي</p>
+            </div>
+            
+            <div class="lesson-content glass-effect">
+                <h3>تعريف الأوبرا</h3>
+                <p>الأوبرا (Opera) هي شكل فني مسرحي يجمع بين الغناء والموسيقى والأداء الدرامي على المسرح. تعتمد الأوبرا على نص أدبي (ليبرتو) يتم غناؤه بالكامل أو معظمه.</p>
+                
+                <h3>مكونات الأوبرا</h3>
+                <ul>
+                    <li><strong>الليبرتو:</strong> النص الأدبي للأوبرا</li>
+                    <li><strong>الموسيقى:</strong> التلحين والأوركسترا</li>
+                    <li><strong>الأداء الغنائي:</strong> المطربون (سوبرانو، تينور، إلخ)</li>
+                    <li><strong>التمثيل والإخراج المسرحي</strong></li>
+                    <li><strong>الديكور والأزياء</strong></li>
+                    <li><strong>الإضاءة والتقنيات المسرحية</strong></li>
+                </ul>
+                
+                <h3>أنواع الأوبرا</h3>
+                <p>1. <strong>الأوبرا السيريا:</strong> الأوبرا الجادة، موضوعات تاريخية أو أسطورية<br>
+                2. <strong>الأوبرا بوفا:</strong> الأوبرا الهزلية، مواضيع كوميدية<br>
+                3. <strong>الأوبريت:</strong> أوبرا خفيفة، تحتوي على حوارات ناطقة<br>
+                4. <strong>الأوبرا الوطنية:</strong> تعبر عن روح وثقافة شعب معين</p>
+                
+                <h3>أصوات الأوبرا</h3>
+                <ul>
+                    <li><strong>السوبرانو:</strong> أعلى صوت نسائي</li>
+                    <li><strong>الميزو-سوبرانو:</strong> الصوت النسائي المتوسط</li>
+                    <li><strong>الألتو:</strong> أدنى صوت نسائي</li>
+                    <li><strong>التينور:</strong> أعلى صوت رجالي</li>
+                    <li><strong>الباريتون:</strong> الصوت الرجالي المتوسط</li>
+                    <li><strong>الباص:</strong> أدنى صوت رجالي</li>
+                </ul>
+                
+                <h3>أشهر أوبرات العالم</h3>
+                <p>• "عرايس فيغارو" - موتسارت<br>
+                • "كارمن" - بيزيه<br>
+                • "لا ترافياتا" - فيردي<br>
+                • "توسكا" - بوتشيني<br>
+                • "فاوست" - غونو</p>
+                
+                <button class="back-button ripple">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة إلى الدروس</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحة أنواع التأليف الغنائي -->
+    <div id="lesson-composition" class="lesson-page">
+        <div class="container">
+            <div class="lesson-header glass-effect">
+                <h2>أنواع التأليف الغنائي</h2>
+                <p>في الموسيقى العربية والعالمية</p>
+            </div>
+            
+            <div class="lesson-content glass-effect">
+                <h3>أنواع التأليف الغنائي العربي</h3>
+                <ul>
+                    <li><strong>الموشح:</strong> شكل غنائي شعري موسيقي نشأ في الأندلس</li>
+                    <li><strong>القدود الحلبية:</strong> أغاني تراثية من حلب، سوريا</li>
+                    <li><strong>الموال:</strong> شكل غنائي يعتمد على الشعر الشعبي</li>
+                    <li><strong>الطقطوقة:</strong> أغنية خفيفة ذات إيقاع رقص</li>
+                    <li><strong>الدور:</strong> شكل غنائي مصري من العصر العثماني</li>
+                    <li><strong>الأغنية العصرية:</strong> تطوير للشكل الغنائي التقليدي</li>
+                </ul>
+                
+                <h3>أنواع التأليف الغنائي العالمي</h3>
+                <ul>
+                    <li><strong>الأغنية (Song):</strong> شكل غنائي بسيط، مقطع ولازمة</li>
+                    <li><strong>الأريا (Aria):</strong> مقطع غنائي منفرد في الأوبرا</li>
+                    <li><strong>الدويت (Duet):</strong> غناء ثنائي</li>
+                    <li><strong>الكورال (Choral):</strong> غناء جماعي</li>
+                    <li><strong>الكانتاتا (Cantata):</strong> عمل غنائي قصصي</li>
+                    <li><strong>الأوراتوريو (Oratorio):</strong> عمل غنائي ديني درامي</li>
+                </ul>
+                
+                <h3>عناصر التأليف الغنائي</h3>
+                <p>1. <strong>النص الشعري:</strong> كلمات الأغنية وبناءها<br>
+                2. <strong>اللحن:</strong> الخط اللحني والمقامات المستخدمة<br>
+                3. <strong>الإيقاع:</strong> الوزن الإيقاعي والسرعة<br>
+                4. <strong>التوزيع الموسيقي:</strong> ترتيب الآلات وتناغمها<br>
+                5. <strong>الشكل:</strong> بناء الأغنية (مقدمة، مقاطع، لازمة، نهاية)</p>
+                
+                <h3>تطور التأليف الغنائي</h3>
+                <p>• <strong>الفترة الكلاسيكية:</strong> أشكال محددة وقواعد صارمة<br>
+                • <strong>الفترة الرومانسية:</strong> حرية أكبر في التعبير<br>
+                • <strong>الفترة المعاصرة:</strong> دمج الأنواع والثقافات<br>
+                • <strong>العصر الرقمي:</strong> تقنيات جديدة في التلحين والتوزيع</p>
+                
+                <button class="back-button ripple">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة إلى الدروس</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحة التأليف الآلي للصوناتا -->
+    <div id="lesson-sonata-composition" class="lesson-page">
+        <div class="container">
+            <div class="lesson-header glass-effect">
+                <h2>التأليف الآلي للصوناتا</h2>
+                <p>بنية وأساليب التأليف</p>
+            </div>
+            
+            <div class="lesson-content glass-effect">
+                <h3>بنية سوناتا-أليغرو</h3>
+                <p>الحركة الأولى من الصوناتا عادة ما تكون على شكل سوناتا-أليغرو، وتتكون من ثلاثة أقسام رئيسية:</p>
+                
+                <h4>1. العرض (Exposition)</h4>
+                <ul>
+                    <li><strong>الموضوع الأول:</strong> في المقام الرئيسي، قوي وواضح</li>
+                    <li><strong>جسر انتقالي:</strong> يربط بين الموضوعين</li>
+                    <li><strong>الموضوع الثاني:</strong> في المقام الخامس (النسبي)، أكثر عاطفية</li>
+                    <li><strong>الختام:</strong> يختتم قسم العرض</li>
+                </ul>
+                
+                <h4>2. التطور (Development)</h4>
+                <p>يتم في هذا القسم تطوير المواد اللحنية من العرض بطرق مختلفة:
+                - تغيير المقامات
+                - تقسيم اللحن إلى أجزاء أصغر
+                - دمج المواد اللحنية
+                - إضافة عناصر جديدة
+                - خلق التوتر الدرامي</p>
+                
+                <h4>3. الإعادة (Recapitulation)</h4>
+                <p>عودة المواد اللحنية من العرض، ولكن مع تعديل مهم:
+                - الموضوع الأول: في المقام الرئيسي
+                - الموضوع الثاني: أيضاً في المقام الرئيسي (ليس النسبي)
+                - الختام: في المقام الرئيسي</p>
+                
+                <h3>التقنيات التأليفية في الصوناتا</h3>
+                <ul>
+                    <li><strong>التقابل اللحني:</strong> تداخل خطوط لحنية مختلفة</li>
+                    <li><strong>التنويع:</strong> تغيير اللحن مع الحفاظ على الهوية</li>
+                    <li><strong>التحويل المقامي:</strong> الانتقال بين المقامات المختلفة</li>
+                    <li><strong>التناغم:</strong> بناء التآلفات المتوازنة</li>
+                    <li><strong>الإيقاع:</strong> استخدام أنماط إيقاعية متنوعة</li>
+                </ul>
+                
+                <h3>مبادئ التأليف للصوناتا</h3>
+                <p>1. <strong>التناقض والوحدة:</strong> التباين بين الأجزاء مع الحفاظ على الوحدة الكلية<br>
+                2. <strong>التوازن:</strong> توازن بين الحركات المختلفة<br>
+                3. <strong>التطور المنطقي:</strong> تطور الأفكار الموسيقية بشكل منطقي<br>
+                4. <strong>التناغم البنائي:</strong> انسجام بين العناصر المختلفة للعمل</p>
+                
+                <button class="back-button ripple">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة إلى الدروس</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- الفوتر -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>عن المكتبة الموسيقية</h3>
+                    <p>منصة تعليمية احترافية تهدف إلى نشر المعرفة الموسيقية وتسهيل فهمها للأساتذة والطلاب. نحن نؤمن بأن الموسيقى لغة عالمية تجمع بين الشعوب والثقافات.</p>
+                    <p>جميع المواد التعليمية مُعدّة خصيصاً لطلاب الصف الأول ثانوي شعبة علوم تجريبية وفق المنهج الدراسي.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <p><a href="#home" style="color: #b0b0b0; text-decoration: none; transition: var(--transition);" class="hover:underline hover:text-white">الرئيسية</a></p>
+                    <p><a href="#lessons" style="color: #b0b0b0; text-decoration: none; transition: var(--transition);" class="hover:underline hover:text-white">الدروس الرئيسية</a></p>
+                    <p><a href="#rhythms" style="color: #b0b0b0; text-decoration: none; transition: var(--transition);" class="hover:underline hover:text-white">الأشكال الإيقاعية</a></p>
+                    <p><a href="#contact" style="color: #b0b0b0; text-decoration: none; transition: var(--transition);" class="hover:underline hover:text-white">اتصل بنا</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>معلومات الاتصال</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>khalilrzcom@gmail.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+213 550 123 456</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>الجزائر</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>أولى ثانوي علوم تجريبية</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 المكتبة الموسيقية الشاملة. جميع الحقوق محفوظة.</p>
+                <p style="margin-top: 15px; font-size: 1.1rem;">تم التصميم بتقنية Liquid Glass | إبداع في التعليم الموسيقي</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // إخفاء شاشة التحميل
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 800);
+            }, 1500);
+        });
+
+        // التحكم في الهيدر عند التمرير
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // التحكم في الروابط التنقلية
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                
+                // إخفاء جميع صفحات الدروس
+                document.querySelectorAll('.lesson-page').forEach(page => {
+                    page.classList.remove('active');
+                    page.style.display = 'none';
+                });
+                
+                // إظهار الصفحة الرئيسية
+                document.getElementById('home').style.display = 'block';
+                
+                // إزالة النشاط من جميع الروابط
+                document.querySelectorAll('.nav-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // إضافة النشاط للرابط الحالي
+                this.classList.add('active');
+                
+                // التمرير إلى القسم المطلوب
+                if (targetId === 'home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (targetId) {
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+                
+                // تأثير النقر
+                this.classList.add('ripple');
+                setTimeout(() => this.classList.remove('ripple'), 1000);
+            });
+        });
+
+        // التحكم في عرض صفحات الدروس
+        document.querySelectorAll('.view-lesson').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lessonId = this.getAttribute('data-lesson');
+                const targetPage = document.getElementById(`lesson-${lessonId}`);
+                
+                // إخفاء الصفحة الرئيسية
+                document.getElementById('home').style.display = 'none';
+                
+                // إخفاء جميع صفحات الدروس الأخرى
+                document.querySelectorAll('.lesson-page').forEach(page => {
+                    if (page !== targetPage) {
+                        page.classList.remove('active');
+                        page.style.display = 'none';
+                    }
+                });
+                
+                // إظهار صفحة الدرس المطلوبة
+                targetPage.classList.add('active');
+                targetPage.style.display = 'block';
+                
+                // التمرير إلى أعلى الصفحة
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // تأثير النقر
+                this.classList.add('ripple');
+                setTimeout(() => this.classList.remove('ripple'), 1000);
+                
+                // تحديث القائمة النشطة
+                document.querySelectorAll('.nav-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+            });
+        });
+
+        // التحكم في أزرار العودة
+        document.querySelectorAll('.back-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // إخفاء جميع صفحات الدروس
+                document.querySelectorAll('.lesson-page').forEach(page => {
+                    page.classList.remove('active');
+                    page.style.display = 'none';
+                });
+                
+                // إظهار الصفحة الرئيسية
+                document.getElementById('home').style.display = 'block';
+                
+                // التمرير إلى قسم الدروس
+                window.scrollTo({
+                    top: document.getElementById('lessons').offsetTop - 100,
+                    behavior: 'smooth'
+                });
+                
+                // تحديث القائمة النشطة
+                document.querySelectorAll('.nav-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector('a[href="#lessons"]').classList.add('active');
+                
+                // تأثير النقر
+                this.classList.add('ripple');
+                setTimeout(() => this.classList.remove('ripple'), 1000);
+            });
+        });
+
+        // التحكم في أزرار التنقل السريع
+        document.getElementById('scrollToTop').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            this.classList.add('ripple');
+            setTimeout(() => this.classList.remove('ripple'), 1000);
+        });
+
+        document.getElementById('scrollToBottom').addEventListener('click', function() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            this.classList.add('ripple');
+            setTimeout(() => this.classList.remove('ripple'), 1000);
+        });
+
+        // أدوات الأساتذة
+        document.getElementById('teacherTools').addEventListener('click', function() {
+            alert('🎵 أدوات الأساتذة قيد التطوير...\n\nميزات قادمة:\n• إنشاء اختبارات تفاعلية\n• تتبع تقدم الطلاب\n• مكتبة الوسائط التعليمية\n• تقارير الأداء');
+            this.classList.add('ripple');
+            setTimeout(() => this.classList.remove('ripple'), 1000);
+        });
+
+        // إضافة تأثيرات للعناصر عند الظهور
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // تطبيق المراقبة على العناصر
+        document.querySelectorAll('.lesson-card, .rhythm, .section-title, .footer-section').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(el);
+        });
+
+        // تحسين التنقل للهواتف
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    document.querySelector('header').style.height = 'auto';
+                }
+            });
+        });
+
+        // إضافة الموسيقى في الخلفية
+        const musicNotes = document.querySelectorAll('.music-note');
+        musicNotes.forEach((note, index) => {
+            note.style.animationDelay = `${index * 2}s`;
+        });
+    </script>
+</body>
+</html>
